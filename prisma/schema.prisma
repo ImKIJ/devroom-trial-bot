@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id                    String   @id
+  welcomeChannelId      String?
+  welcomeMessage        String   @default("Welcome {user} to our server!")
+  dailyMessageChannelId String?
+  dailyMessageContent   String?
+  dailyMessageTime      String?
+  members               Member[]
+}
+
+model Member {
+  id       String @id
+  guildId  String
+  messages Int    @default(0)
+  Guild    Guild  @relation(fields: [guildId], references: [id])
+}
